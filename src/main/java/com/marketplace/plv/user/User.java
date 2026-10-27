@@ -8,10 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.Instant;
 
@@ -32,10 +29,12 @@ public class User extends AuditedEntity {
 	private String username;
 
 	@Builder.Default
+	@Setter
 	@Column(name = "is_active", nullable = false)
 	private boolean active = false;
 
 	@Column(name = "last_login")
+	@Setter
 	private Instant lastLogin;
 
 }
