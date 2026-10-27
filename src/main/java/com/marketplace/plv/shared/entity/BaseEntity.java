@@ -1,4 +1,4 @@
-package com.marketplace.plv.shared;
+package com.marketplace.plv.shared.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
