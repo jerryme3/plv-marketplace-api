@@ -1,7 +1,7 @@
 package com.marketplace.plv.user;
 
 import com.marketplace.plv.account.Account;
-import com.marketplace.plv.shared.AuditedEntity;
+import com.marketplace.plv.shared.entity.AuditedEntity;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

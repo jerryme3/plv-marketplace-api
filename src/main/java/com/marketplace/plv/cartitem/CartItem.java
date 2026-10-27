@@ -2,7 +2,7 @@ package com.marketplace.plv.cartitem;
 
 import com.marketplace.plv.cart.Cart;
 import com.marketplace.plv.product.Product;
-import com.marketplace.plv.shared.BaseEntity;
+import com.marketplace.plv.shared.entity.BaseEntity;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

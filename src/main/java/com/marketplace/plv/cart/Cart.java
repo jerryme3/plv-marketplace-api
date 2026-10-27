@@ -1,7 +1,7 @@
 package com.marketplace.plv.cart;
 
 import com.marketplace.plv.buyer.Buyer;
-import com.marketplace.plv.shared.AuditedEntity;
+import com.marketplace.plv.shared.entity.AuditedEntity;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
