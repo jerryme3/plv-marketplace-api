@@ -4,6 +4,7 @@ import com.marketplace.plv.account.Account;
 import com.marketplace.plv.account.AccountMapper;
 import com.marketplace.plv.account.AccountRepository;
 import com.marketplace.plv.account.dto.AccountRequest;
+import com.marketplace.plv.shared.exceptions.conflict.EmailConflictException;
 import com.marketplace.plv.shared.exceptions.notfound.EmailNotFoundException;
 import com.marketplace.plv.shared.exceptions.notfound.UserNotFoundException;
 import com.marketplace.plv.user.User;
@@ -14,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,14 +41,14 @@ public class AuthService {
 		var accountReq = request.account();
 		var email = accountReq.email();
 
-		if (accountRepository.existsByEmail(email)) throw new EmailNotFoundException("Invalid email");
+		if (accountRepository.existsByEmail(email)) throw new EmailConflictException("Invalid email");
 		if (userRepository.existsByUsername(request.username())) throw new UserNotFoundException("Invalid username");
 
 		var account = accountMapper.reqToEntity(accountReq,
 				req -> new Account(req.email(), encoder.encode(req.password())));
 		var savedAccount = accountRepository.save(account);
 		var user = userMapper.reqToEntity(request,
-				req -> User.builder().account(savedAccount).username(req.username()).active(true).build());
+				req -> User.builder().account(savedAccount).username(req.username()).build());
 		userRepository.save(user);
 
 		return authCookieService.generateCookie(savedAccount.getId().toString(), "ROLE_USER");
@@ -79,18 +79,20 @@ public class AuthService {
 	}
 
 	ResponseCookie logout() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		var	auth = SecurityContextHolder.getContext().getAuthentication();
 
-		if (auth != null && auth.isAuthenticated()) {
-			var identifier = auth.getName();
+		authCookieService.getUserIdFromContext(e -> {
+			if (auth != null && auth.isAuthenticated()) {
+				var identifier = auth.getName();
 
-			userRepository
-					.findById(Long.parseLong(identifier))
-					.ifPresent(e -> {
-						e.setActive(false);
-						userRepository.save(e);
-					});
-		}
+				userRepository
+						.findById(Long.parseLong(identifier))
+						.ifPresent(b -> {
+							b.setActive(false);
+							userRepository.save(b);
+				});
+			}
+		});
 
 		SecurityContextHolder.clearContext();
 
