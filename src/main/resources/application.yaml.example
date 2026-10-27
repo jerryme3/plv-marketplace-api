@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: com-marketplace-plv #just put whatever your project name here has
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+app:
+  jwt:
+    secret: your-secret-key (if you have a provider just look up for an oauth configuration, if not, open git bash then paste this command: openssl rand -hex 32)
+    expiration: exp-in-millis (e.g., 3600000)
+
+logging:
+  org.springframework.security: TRACE
+  org.hibernate.SQL: TRACE
