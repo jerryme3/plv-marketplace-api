@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -34,12 +35,13 @@ public class AuthService {
 
 	@Transactional
 	ResponseCookie register(UserRequest request) {
-		var email = request.email();
+		var accountReq = request.account();
+		var email = accountReq.email();
 
 		if (accountRepository.existsByEmail(email)) throw new IllegalArgumentException("Invalid email");
 		if (userRepository.existsByUsername(request.username())) throw new IllegalArgumentException("Invalid username");
 
-		var account = accountMapper.reqToEntity(request,
+		var account = accountMapper.reqToEntity(accountReq,
 				req -> new Account(req.email(), encoder.encode(req.password())));
 		var savedAccount = accountRepository.save(account);
 		var user = userMapper.reqToEntity(request,
@@ -65,7 +67,15 @@ public class AuthService {
 				.map(GrantedAuthority::getAuthority)
 				.collect(Collectors.joining(" "));
 
+		var user = userRepository.findByAccount(account).orElseThrow(() -> new NoSuchElementException("There are no user with this account details"));
+		user.setActive(true);
+		user.setLastLogin(Instant.now());
+
 		return authCookieService.generateCookie(id, scope);
+	}
+
+	ResponseCookie logout() {
+		return authCookieService.clearCookie();
 	}
 
 }
