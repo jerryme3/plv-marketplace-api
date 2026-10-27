@@ -4,6 +4,8 @@ import com.marketplace.plv.account.Account;
 import com.marketplace.plv.account.AccountMapper;
 import com.marketplace.plv.account.AccountRepository;
 import com.marketplace.plv.account.dto.AccountRequest;
+import com.marketplace.plv.shared.exceptions.notfound.EmailNotFoundException;
+import com.marketplace.plv.shared.exceptions.notfound.UserNotFoundException;
 import com.marketplace.plv.user.User;
 import com.marketplace.plv.user.UserMapper;
 import com.marketplace.plv.user.UserRepository;
@@ -12,13 +14,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,8 +41,8 @@ public class AuthService {
 		var accountReq = request.account();
 		var email = accountReq.email();
 
-		if (accountRepository.existsByEmail(email)) throw new IllegalArgumentException("Invalid email");
-		if (userRepository.existsByUsername(request.username())) throw new IllegalArgumentException("Invalid username");
+		if (accountRepository.existsByEmail(email)) throw new EmailNotFoundException("Invalid email");
+		if (userRepository.existsByUsername(request.username())) throw new UserNotFoundException("Invalid username");
 
 		var account = accountMapper.reqToEntity(accountReq,
 				req -> new Account(req.email(), encoder.encode(req.password())));
@@ -58,7 +61,7 @@ public class AuthService {
 				new UsernamePasswordAuthenticationToken(email, request.password())
 		);
 
-		var account = accountRepository.findByEmail(email).orElseThrow(() -> new NoSuchElementException("There are no account with this email"));
+		var account = accountRepository.findByEmail(email).orElseThrow(() -> new EmailNotFoundException("There are no account with this email"));
 
 		var id = account.getId().toString();
 		var scope = authentication
@@ -67,14 +70,30 @@ public class AuthService {
 				.map(GrantedAuthority::getAuthority)
 				.collect(Collectors.joining(" "));
 
-		var user = userRepository.findByAccount(account).orElseThrow(() -> new NoSuchElementException("There are no user with this account details"));
+		var user = userRepository.findByAccount(account).orElseThrow(() -> new UserNotFoundException("There are no user with this account details"));
 		user.setActive(true);
 		user.setLastLogin(Instant.now());
+		userRepository.save(user);
 
 		return authCookieService.generateCookie(id, scope);
 	}
 
 	ResponseCookie logout() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		if (auth != null && auth.isAuthenticated()) {
+			var identifier = auth.getName();
+
+			userRepository
+					.findById(Long.parseLong(identifier))
+					.ifPresent(e -> {
+						e.setActive(false);
+						userRepository.save(e);
+					});
+		}
+
+		SecurityContextHolder.clearContext();
+
 		return authCookieService.clearCookie();
 	}
 
