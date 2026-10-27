@@ -97,9 +97,9 @@ public class SecurityConfig {
 				)
 				.authorizeHttpRequests(
 						req -> req
-								.requestMatchers(HttpMethod.GET, "/", "/error")
-								.permitAll()
-								.requestMatchers("api/v1/**")
+								.requestMatchers(HttpMethod.GET, "/", "/error").permitAll()
+								.requestMatchers("/api/v1/auth/**").permitAll()
+								.requestMatchers("/api/v1/product/**")
 								.authenticated()
 				)
 				.oauth2ResourceServer(oa -> oa.bearerTokenResolver(cookieBearerTokenResolver())
