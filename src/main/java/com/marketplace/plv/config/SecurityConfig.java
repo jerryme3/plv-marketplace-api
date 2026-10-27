@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -95,7 +96,11 @@ public class SecurityConfig {
 						o -> o.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				)
 				.authorizeHttpRequests(
-						req -> req.requestMatchers("/", "/api/v1/**", "/error").permitAll().anyRequest().authenticated()
+						req -> req
+								.requestMatchers(HttpMethod.GET, "/", "/error")
+								.permitAll()
+								.requestMatchers("api/v1/**")
+								.authenticated()
 				)
 				.oauth2ResourceServer(oa -> oa.bearerTokenResolver(cookieBearerTokenResolver())
 						.jwt(j -> jwtDecoder()));
