@@ -33,7 +33,7 @@ public class User extends AuditedEntity {
 
 	@Builder.Default
 	@Column(name = "is_active", nullable = false)
-	private boolean active = true;
+	private boolean active = false;
 
 	@Column(name = "last_login")
 	private Instant lastLogin;
