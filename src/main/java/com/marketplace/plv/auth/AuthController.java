@@ -36,4 +36,13 @@ public class AuthController {
 				.body("Logged in successfully!");
 	}
 
+	@PostMapping("/logout")
+	public ResponseEntity<String> logout() {
+		var cookie = authService.logout();
+
+		return ResponseEntity.ok()
+				.header(HttpHeaders.SET_COOKIE, cookie.toString())
+				.body("Logged out successfully.");
+	}
+
 }
