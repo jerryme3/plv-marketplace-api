@@ -47,7 +47,14 @@ public class AuthCookieService {
 
 	}
 
-
-
-
+	public ResponseCookie clearCookie() {
+		return ResponseCookie
+				.from(cookieName)
+				.httpOnly(true)
+				.secure(true)
+				.path("/")
+				.maxAge(0)
+				.sameSite("Strict")
+				.build();
+	}
 }
