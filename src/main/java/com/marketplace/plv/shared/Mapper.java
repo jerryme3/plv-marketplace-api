@@ -14,4 +14,11 @@ public interface Mapper<T, R, S> {
 
 		return Objects.requireNonNull(func).apply(req);
 	}
+
+	default S entityToResponse(T entity, Function<T, S> func) {
+		Objects.requireNonNull(entity);
+
+		return Objects.requireNonNull(func).apply(entity);
+	}
+
 }
