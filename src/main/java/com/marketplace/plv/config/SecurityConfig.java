@@ -104,7 +104,7 @@ public class SecurityConfig {
 								.requestMatchers(HttpMethod.GET, "/", "/error").permitAll()
 								.requestMatchers("/api/v1/auth/**").permitAll()
 								.requestMatchers("/api/v1/product/**").permitAll()
-								.requestMatchers(HttpMethod.PUT, "/api/v1/me/update/**")
+								.requestMatchers("/api/v1/me/update/**")
 								.authenticated().anyRequest().authenticated()
 				)
 				.oauth2ResourceServer(oa -> oa.bearerTokenResolver(cookieBearerTokenResolver())
