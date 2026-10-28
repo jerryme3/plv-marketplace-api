@@ -61,12 +61,13 @@ public class AuthCookieService {
 				.build();
 	}
 
-	public void getUserIdFromContext(Consumer<Authentication> action) {
+	public Long getUserIdFromContext() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-		action.accept(auth);
+		if (auth != null && auth.isAuthenticated()) return Long.parseLong(auth.getName());
 
 		SecurityContextHolder.clearContext();
+		return null;
 	}
 
 }

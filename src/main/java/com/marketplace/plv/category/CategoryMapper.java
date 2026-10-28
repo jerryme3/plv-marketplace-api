@@ -7,4 +7,17 @@ import org.springframework.stereotype.Component;
 
 @Component
 public final class CategoryMapper implements Mapper<Category, CategoryRequest, CategoryResponse> {
+
+	@Override
+	public Category reqToEntity(CategoryRequest request) {
+		return Category.builder()
+				.name(request.name())
+				.description(request.description())
+				.build();
+	}
+
+	@Override
+	public CategoryResponse entityToResponse(Category category) {
+		return new CategoryResponse(category.getId(), category.getName(), category.getDescription());
+	}
 }

@@ -2,6 +2,7 @@ package com.marketplace.plv.user;
 
 import com.marketplace.plv.account.Account;
 import com.marketplace.plv.shared.entity.AuditedEntity;
+import com.marketplace.plv.user.dto.UserRequest;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,6 +14,7 @@ import lombok.*;
 import java.time.Instant;
 
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,12 +31,9 @@ public class User extends AuditedEntity {
 	private String username;
 
 	@Builder.Default
-	@Setter
 	@Column(name = "is_active", nullable = false)
 	private boolean active = false;
 
 	@Column(name = "last_login")
-	@Setter
 	private Instant lastLogin;
-
 }

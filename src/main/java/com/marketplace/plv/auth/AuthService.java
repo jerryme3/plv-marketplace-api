@@ -44,11 +44,10 @@ public class AuthService {
 		if (accountRepository.existsByEmail(email)) throw new EmailConflictException("Invalid email");
 		if (userRepository.existsByUsername(request.username())) throw new UserNotFoundException("Invalid username");
 
-		var account = accountMapper.reqToEntity(accountReq,
-				req -> new Account(req.email(), encoder.encode(req.password())));
+		var account = accountMapper.reqToEntity(accountReq);
 		var savedAccount = accountRepository.save(account);
-		var user = userMapper.reqToEntity(request,
-				req -> User.builder().account(savedAccount).username(req.username()).build());
+		var user = userMapper.reqToEntity(request);
+		user.setAccount(savedAccount);
 		userRepository.save(user);
 
 		return authCookieService.generateCookie(savedAccount.getId().toString(), "ROLE_USER");
@@ -79,22 +78,12 @@ public class AuthService {
 	}
 
 	ResponseCookie logout() {
-		var	auth = SecurityContextHolder.getContext().getAuthentication();
-
-		authCookieService.getUserIdFromContext(e -> {
-			if (auth != null && auth.isAuthenticated()) {
-				var identifier = auth.getName();
-
-				userRepository
-						.findById(Long.parseLong(identifier))
-						.ifPresent(b -> {
-							b.setActive(false);
-							userRepository.save(b);
+		userRepository
+				.findById(authCookieService.getUserIdFromContext())
+				.ifPresent(e -> {
+					e.setActive(false);
+					userRepository.save(e);
 				});
-			}
-		});
-
-		SecurityContextHolder.clearContext();
 
 		return authCookieService.clearCookie();
 	}

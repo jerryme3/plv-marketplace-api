@@ -1,24 +1,19 @@
 package com.marketplace.plv.shared;
 
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.Objects;
-import java.util.function.Function;
 
 @Component
 public interface Mapper<T, R, S> {
 
-	default T reqToEntity(R req, Function<R, T> func) {
+	default T reqToEntity(R req) {
 		Objects.requireNonNull(req);
-
-		return Objects.requireNonNull(func).apply(req);
+		throw new UnsupportedOperationException("This mapper requires additional entities to create " + req.getClass().getSimpleName());
 	}
 
-	default S entityToResponse(T entity, Function<T, S> func) {
+	default S entityToResponse(T entity) {
 		Objects.requireNonNull(entity);
-
-		return Objects.requireNonNull(func).apply(entity);
+		throw new UnsupportedOperationException("This entity response mapping is not supported by " + entity.getClass().getSimpleName());
 	}
-
 }
