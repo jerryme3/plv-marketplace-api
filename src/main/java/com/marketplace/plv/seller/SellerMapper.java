@@ -3,6 +3,7 @@ package com.marketplace.plv.seller;
 import com.marketplace.plv.seller.dto.SellerRequest;
 import com.marketplace.plv.seller.dto.SellerResponse;
 import com.marketplace.plv.shared.Mapper;
+import com.marketplace.plv.user.User;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,8 @@ public final class SellerMapper implements Mapper<Seller, SellerRequest, SellerR
 
 	@Override
 	public Seller reqToEntity(SellerRequest request) {
-		var user = entityManager.getReference(com.marketplace.plv.user.User.class, request.userId());
+		var user = entityManager.getReference(User.class, request.userId());
+
 		return Seller.builder().user(user).build();
 	}
 
