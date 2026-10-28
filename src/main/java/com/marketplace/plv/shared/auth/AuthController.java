@@ -1,4 +1,4 @@
-package com.marketplace.plv.auth;
+package com.marketplace.plv.shared.auth;
 
 import com.marketplace.plv.account.dto.AccountRequest;
 import com.marketplace.plv.user.dto.UserRequest;

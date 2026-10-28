@@ -1,7 +1,7 @@
 package com.marketplace.plv.user;
 
 import com.marketplace.plv.account.AccountRepository;
-import com.marketplace.plv.auth.AuthCookieService;
+import com.marketplace.plv.shared.auth.AuthCookieService;
 import com.marketplace.plv.shared.entity.ApiResponse;
 import com.marketplace.plv.shared.entity.UpdateRequest;
 import com.marketplace.plv.shared.exceptions.conflict.ConflictException;

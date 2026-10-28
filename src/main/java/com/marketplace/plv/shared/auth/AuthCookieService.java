@@ -1,4 +1,4 @@
-package com.marketplace.plv.auth;
+package com.marketplace.plv.shared.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseCookie;

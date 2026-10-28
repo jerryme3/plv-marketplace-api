@@ -1,4 +1,4 @@
-package com.marketplace.plv.config;
+package com.marketplace.plv.shared.config;
 
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.jwk.JWK;
@@ -113,6 +113,7 @@ public class SecurityConfig {
 		return http.build();
 	}
 
+	//A bean for CORS to let the frontend communicate to the backend (still won't let me connect to the backend)
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration config = new CorsConfiguration();

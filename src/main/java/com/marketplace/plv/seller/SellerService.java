@@ -1,6 +1,6 @@
 package com.marketplace.plv.seller;
 
-import com.marketplace.plv.auth.AuthCookieService;
+import com.marketplace.plv.shared.auth.AuthCookieService;
 import com.marketplace.plv.seller.dto.SellerRequest;
 import com.marketplace.plv.seller.dto.SellerResponse;
 import com.marketplace.plv.shared.entity.ApiResponse;

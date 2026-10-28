@@ -1,4 +1,4 @@
-package com.marketplace.plv.config;
+package com.marketplace.plv.shared.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

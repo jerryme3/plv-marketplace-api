@@ -1,13 +1,11 @@
-package com.marketplace.plv.auth;
+package com.marketplace.plv.shared.auth;
 
-import com.marketplace.plv.account.Account;
 import com.marketplace.plv.account.AccountMapper;
 import com.marketplace.plv.account.AccountRepository;
 import com.marketplace.plv.account.dto.AccountRequest;
 import com.marketplace.plv.shared.exceptions.conflict.EmailConflictException;
 import com.marketplace.plv.shared.exceptions.notfound.EmailNotFoundException;
 import com.marketplace.plv.shared.exceptions.notfound.UserNotFoundException;
-import com.marketplace.plv.user.User;
 import com.marketplace.plv.user.UserMapper;
 import com.marketplace.plv.user.UserRepository;
 import com.marketplace.plv.user.dto.UserRequest;
@@ -16,7 +14,6 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
