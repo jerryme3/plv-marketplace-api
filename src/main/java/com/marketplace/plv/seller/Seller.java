@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Check;
 
 import java.math.BigDecimal;
 
@@ -23,7 +22,6 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "sellers")
 @AttributeOverride(name = "id", column = @Column(name = "seller_id"))
-@Check(constraints = "rating >= 0.00 AND rating <= 5.00")
 public class Seller extends BaseEntity {
 
 	@OneToOne(optional = false)
