@@ -1,7 +1,9 @@
 package com.marketplace.plv.cartitem;
 
+import com.marketplace.plv.cart.Cart;
 import com.marketplace.plv.cartitem.dto.CartItemRequest;
 import com.marketplace.plv.cartitem.dto.CartItemResponse;
+import com.marketplace.plv.product.Product;
 import com.marketplace.plv.shared.Mapper;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +17,8 @@ public final class CartItemMapper implements Mapper<CartItem, CartItemRequest, C
 
 	@Override
 	public CartItem reqToEntity(CartItemRequest request) {
-		var cart = entityManager.getReference(com.marketplace.plv.cart.Cart.class, request.cartId());
-		var product = entityManager.getReference(com.marketplace.plv.product.Product.class, request.productId());
+		var cart = entityManager.getReference(Cart.class, request.cartId());
+		var product = entityManager.getReference(Product.class, request.productId());
 		return CartItem.builder().cart(cart).product(product).quantity(request.quantity()).build();
 	}
 
