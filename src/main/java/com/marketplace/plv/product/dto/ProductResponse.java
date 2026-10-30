@@ -10,7 +10,6 @@ public record ProductResponse(
 		String title,
 		String description,
 		BigDecimal price,
-		int stockQuantity,
 		Instant createdAt,
 		Instant updatedAt
 ) {

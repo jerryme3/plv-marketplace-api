@@ -14,6 +14,6 @@ public record ProductRequest(
 		@NotBlank @Size(max = 100) String title,
 		String description,
 		@NotNull @DecimalMin("0.00") BigDecimal price,
-		@PositiveOrZero int stockQuantity
+		Integer stockQuantity
 ) {
 }

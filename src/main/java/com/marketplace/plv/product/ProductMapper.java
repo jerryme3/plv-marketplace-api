@@ -23,14 +23,13 @@ public final class ProductMapper implements Mapper<Product, ProductRequest, Prod
 				.title(request.title())
 				.description(request.description())
 				.price(request.price())
-				.stockQuantity(request.stockQuantity())
 				.build();
 	}
 
 	@Override
 	public ProductResponse entityToResponse(Product product) {
 		return new ProductResponse(product.getId(), product.getStore().getId(), product.getCategory().getId(),
-				product.getTitle(), product.getDescription(), product.getPrice(), product.getStockQuantity(),
+				product.getTitle(), product.getDescription(), product.getPrice(),
 				product.getCreatedAt(), product.getUpdatedAt());
 	}
 }
