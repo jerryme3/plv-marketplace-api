@@ -3,6 +3,9 @@ package com.marketplace.plv.shared.auth;
 import com.marketplace.plv.account.AccountMapper;
 import com.marketplace.plv.account.AccountRepository;
 import com.marketplace.plv.account.dto.AccountRequest;
+import com.marketplace.plv.buyer.Buyer;
+import com.marketplace.plv.buyer.BuyerMapper;
+import com.marketplace.plv.buyer.BuyerRepository;
 import com.marketplace.plv.shared.exceptions.conflict.EmailConflictException;
 import com.marketplace.plv.shared.exceptions.notfound.EmailNotFoundException;
 import com.marketplace.plv.shared.exceptions.notfound.UserNotFoundException;
@@ -27,11 +30,13 @@ public class AuthService {
 
 	private final AccountMapper accountMapper;
 	private final UserMapper userMapper;
+	private final BuyerMapper buyerMapper;
+
 	private final AuthCookieService authCookieService;
 	private final AuthenticationManager authManager;
 	private final AccountRepository accountRepository;
 	private final UserRepository userRepository;
-	private final PasswordEncoder encoder;
+	private final BuyerRepository buyerRepository;
 
 	@Transactional
 	ResponseCookie register(UserRequest request) {
@@ -47,12 +52,16 @@ public class AuthService {
 		user.setAccount(savedAccount);
 		userRepository.save(user);
 
+		var buyer = Buyer.builder().user(user).build();
+		buyerRepository.save(buyer);
+
 		return authCookieService.generateCookie(savedAccount.getId().toString(), "ROLE_USER");
 	}
 
 	ResponseCookie login(AccountRequest request) {
 		var email = request.email();
 
+		//authenticates user credentials
 		var authentication = authManager.authenticate(
 				new UsernamePasswordAuthenticationToken(email, request.password())
 		);
