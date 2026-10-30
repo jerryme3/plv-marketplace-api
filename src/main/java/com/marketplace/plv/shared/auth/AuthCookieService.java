@@ -69,4 +69,8 @@ public class AuthCookieService {
 		return null;
 	}
 
+	public boolean isValidSession() {
+		return getUserIdFromContext() != null;
+	}
+
 }
