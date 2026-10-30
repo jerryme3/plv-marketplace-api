@@ -13,6 +13,7 @@ import java.time.Instant;
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
+@SuppressWarnings("unused")
 public abstract class AuditedEntity extends BaseEntity {
 
 	@CreatedDate
