@@ -14,7 +14,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Check;
 
 import java.math.BigDecimal;
 
@@ -25,7 +24,6 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "products")
 @AttributeOverride(name = "id", column = @Column(name = "product_id"))
-@Check(constraints = "price >= 0 AND stock_quantity >= 0")
 public class Product extends AuditedEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -44,9 +42,5 @@ public class Product extends AuditedEntity {
 
 	@Column(name = "price", nullable = false, precision = 10, scale = 2)
 	private BigDecimal price;
-
-	@Builder.Default
-	@Column(name = "stock_quantity", nullable = false)
-	private int stockQuantity = 0;
 
 }
