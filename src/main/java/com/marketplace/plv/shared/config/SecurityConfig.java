@@ -27,6 +27,8 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
@@ -104,13 +106,26 @@ public class SecurityConfig {
 								.requestMatchers(HttpMethod.GET, "/", "/error").permitAll()
 								.requestMatchers("/api/v1/auth/**").permitAll()
 								.requestMatchers("/api/v1/product/**").permitAll()
-								.requestMatchers("/api/v1/me/update/**")
-								.authenticated().anyRequest().authenticated()
+								.requestMatchers("/api/v1/me/update/**").permitAll()
+								.requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+								.anyRequest().authenticated()
 				)
 				.oauth2ResourceServer(oa -> oa.bearerTokenResolver(cookieBearerTokenResolver())
-						.jwt(j -> jwtDecoder()));
+						.jwt(j -> j.decoder(jwtDecoder())
+								.jwtAuthenticationConverter(jwtAuthenticationConverter())));
 
 		return http.build();
+	}
+
+	@Bean
+	JwtAuthenticationConverter jwtAuthenticationConverter() {
+		var grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+		grantedAuthoritiesConverter.setAuthoritiesClaimName("scope");
+		grantedAuthoritiesConverter.setAuthorityPrefix("");
+
+		var authenticationConverter = new JwtAuthenticationConverter();
+		authenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
+		return authenticationConverter;
 	}
 
 	//A bean for CORS to let the frontend communicate to the backend (still won't let me connect to the backend)

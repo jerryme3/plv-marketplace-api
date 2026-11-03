@@ -2,6 +2,7 @@ package com.marketplace.plv.shared.auth;
 
 import com.marketplace.plv.account.AccountMapper;
 import com.marketplace.plv.account.AccountRepository;
+import com.marketplace.plv.account.AccountRole;
 import com.marketplace.plv.account.dto.AccountRequest;
 import com.marketplace.plv.buyer.Buyer;
 import com.marketplace.plv.buyer.BuyerMapper;
@@ -17,7 +18,6 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,7 +55,7 @@ public class AuthService {
 		var buyer = Buyer.builder().user(user).build();
 		buyerRepository.save(buyer);
 
-		return authCookieService.generateCookie(savedAccount.getId().toString(), "ROLE_USER");
+		return authCookieService.generateCookie(savedAccount.getId().toString(), savedAccount.getRole().name());
 	}
 
 	ResponseCookie login(AccountRequest request) {
