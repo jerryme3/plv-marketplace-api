@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLV Marketplace</title>
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: Georgia, "Times New Roman", serif;
+            color: #20201d;
+            background: #f3f0e8;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            background:
+                linear-gradient(rgba(243, 240, 232, 0.94), rgba(243, 240, 232, 0.94)),
+                repeating-linear-gradient(0deg, transparent 0 31px, #ded8c9 32px);
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 72px;
+            padding: 0 32px;
+            border-bottom: 1px solid #cbc4b5;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .brand {
+            color: #20201d;
+            font-size: 1.25rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            gap: 8px;
+        }
+
+        nav a {
+            padding: 8px 12px;
+            color: #20201d;
+            font-family: Arial, sans-serif;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+
+        nav a:last-child {
+            border: 1px solid #20201d;
+        }
+
+        main {
+            display: grid;
+            align-items: center;
+            min-height: calc(100vh - 72px);
+            padding: 48px 32px;
+        }
+
+        .hero {
+            width: min(760px, 100%);
+            margin: 0 auto;
+        }
+
+        h1 {
+            max-width: 700px;
+            margin: 0;
+            font-size: clamp(3rem, 9vw, 6.5rem);
+            font-weight: normal;
+            line-height: 0.92;
+        }
+
+        .hero p {
+            max-width: 520px;
+            margin: 28px 0 32px;
+            font-family: Arial, sans-serif;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .hero a {
+            display: inline-block;
+            padding: 14px 18px;
+            border: 1px solid #20201d;
+            color: #f8f6ef;
+            background: #20201d;
+            font-family: Arial, sans-serif;
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                align-items: flex-start;
+                gap: 16px;
+                padding: 18px 20px;
+            }
+
+            nav {
+                flex-direction: column;
+                align-items: flex-end;
+            }
+
+            main {
+                padding-inline: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <a class="brand" href="/">PLV Marketplace</a>
+    <nav aria-label="Primary navigation">
+        <a href="/login.html">Login</a>
+        <a href="/login.html">Get started</a>
+    </nav>
+</header>
+<main>
+    <section class="hero">
+        <h1>Local goods, simply found.</h1>
+        <p>A marketplace for buyers and sellers to discover products, manage orders, and trade with confidence.</p>
+        <a href="/login.html">Enter the marketplace</a>
+    </section>
+</main>
+</body>
+</html>

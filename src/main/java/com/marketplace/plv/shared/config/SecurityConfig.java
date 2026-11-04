@@ -103,9 +103,12 @@ public class SecurityConfig {
 				)
 				.authorizeHttpRequests(
 						req -> req
-								.requestMatchers(HttpMethod.GET, "/", "/error").permitAll()
+								.requestMatchers(HttpMethod.GET, "/", "/index.html", "/login.html", "/login.js", "/error").permitAll()
 								.requestMatchers("/api/v1/auth/**").permitAll()
 								.requestMatchers("/api/v1/product/**").permitAll()
+								.requestMatchers("/api/v1/products/**").permitAll()
+								.requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
+								.requestMatchers(HttpMethod.GET, "/api/v1/store", "/api/v1/store/**").permitAll()
 								.requestMatchers("/api/v1/me/update/**").permitAll()
 								.requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
 								.anyRequest().authenticated()

@@ -14,9 +14,12 @@ import com.marketplace.plv.shared.exceptions.ForbiddenAccessException;
 import com.marketplace.plv.shared.exceptions.notfound.UserNotFoundException;
 import com.marketplace.plv.store.dto.StoreRequest;
 import com.marketplace.plv.store.dto.StoreResponse;
+import com.marketplace.plv.store.dto.StoreBrowseResponse;
+import com.marketplace.plv.shared.exceptions.notfound.NotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +35,28 @@ public class StoreService {
 	private final ProductStockMapper productStockMapper;
 
 	private final AuthCookieService authCookieService;
+
+	public List<StoreBrowseResponse> browseStores() {
+		return storeRepository.findAll().stream()
+				.map(this::toBrowseResponse)
+				.toList();
+	}
+
+	public StoreBrowseResponse getStore(Long storeId) {
+		var store = storeRepository.findById(storeId)
+				.orElseThrow(() -> new NotFoundException("Store not found"));
+		return toBrowseResponse(store);
+	}
+
+	private StoreBrowseResponse toBrowseResponse(Store store) {
+		return new StoreBrowseResponse(
+				store.getId(),
+				store.getName(),
+				store.getDescription(),
+				storeRepository.countProducts(store.getId()),
+				store.getCreatedAt()
+		);
+	}
 
 	@Transactional
 	ApiResponse<StoreResponse> registerStore(StoreRequest request) {
