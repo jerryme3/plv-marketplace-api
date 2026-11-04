@@ -34,6 +34,8 @@ build/
 .env
 /src/main/resources/application.yaml
 IMPLEMENTATION_CHANGES.md
+PAGING_AND_SORTING_IMPLEMENTATION.md
 plv_marketplace_schema.md
+
 
 postman
