@@ -1,8 +1,12 @@
 package com.marketplace.plv.order;
 
 public enum OrderStatus {
-	CANCELLED,
 	PENDING,
-	DELIVERING,
-	DELIVERED
+	PAID,
+	CONFIRMED,
+	PACKED,
+	SHIPPED,
+	COMPLETED,
+	CANCELLED,
+	REFUNDED
 }

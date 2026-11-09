@@ -19,6 +19,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -45,6 +46,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @RequiredArgsConstructor
+@EnableMethodSecurity
 public class SecurityConfig {
 
 	@Value("${app.jwt.secret}")
@@ -111,6 +113,7 @@ public class SecurityConfig {
 								.requestMatchers(HttpMethod.GET, "/api/v1/store", "/api/v1/store/**").permitAll()
 								.requestMatchers("/api/v1/me/update/**").permitAll()
 								.requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+								.requestMatchers("/api/v1/seller/**").authenticated()
 								.anyRequest().authenticated()
 				)
 				.oauth2ResourceServer(oa -> oa.bearerTokenResolver(cookieBearerTokenResolver())
@@ -136,7 +139,7 @@ public class SecurityConfig {
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowedOriginPatterns(List.of("http://localhost:*", "http://127.0.0.1:*"));
-		config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+		config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
 		config.setAllowedHeaders(List.of("*"));
 		config.setAllowCredentials(true);
 

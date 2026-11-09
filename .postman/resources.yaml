@@ -2,6 +2,12 @@
 workspace:
   id: 1e76afdd-6600-4028-82eb-0b702bcb7832
 
+# Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
+
+cloudResources:
+  collections:
+    ../postman/collections/Product browsing - 700 product load: 5ce6d5c7-fe1f-42f4-adb1-5b1c5dcb8b9d
+
 # All resources in the `postman/` folder are automatically registered in Local View.
 # Point to additional files outside the `postman/` folder to register them individually. Example:
 #localResources:

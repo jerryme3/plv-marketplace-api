@@ -17,10 +17,17 @@ public final class CartItemMapper implements Mapper<CartItem, CartItemRequest, C
 
 	@Override
 	public CartItem reqToEntity(CartItemRequest request) {
-		var cart = entityManager.getReference(Cart.class, request.cartId());
+		var cart = entityManager.getReference(Cart.class, null);
 		var product = entityManager.getReference(Product.class, request.productId());
 		return CartItem.builder().cart(cart).product(product).quantity(request.quantity()).build();
 	}
+
+	public CartItem reqToEntity(CartItemRequest request, Long cartId) {
+		var cart = entityManager.getReference(Cart.class, cartId);
+		var product = entityManager.getReference(Product.class, request.productId());
+		return CartItem.builder().cart(cart).product(product).quantity(request.quantity()).build();
+	}
+
 
 	@Override
 	public CartItemResponse entityToResponse(CartItem cartItem) {

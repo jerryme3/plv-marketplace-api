@@ -31,7 +31,7 @@ public class AdminService {
 		if (!authCookieService.isValidSession()) throw new ForbiddenAccessException("Invalid session");
 
 		var adminId = authCookieService.getUserIdFromContext();
-		var admin = userRepository.findById(adminId).orElseThrow(() -> new UserNotFoundException("Invalid user ID"));
+		var admin = userRepository.findByAccountId(adminId).orElseThrow(() -> new UserNotFoundException("Invalid user ID"));
 
 		return "Hello " + admin.getUsername() + "!";
 	}

@@ -7,6 +7,8 @@ import com.marketplace.plv.account.dto.AccountRequest;
 import com.marketplace.plv.buyer.Buyer;
 import com.marketplace.plv.buyer.BuyerMapper;
 import com.marketplace.plv.buyer.BuyerRepository;
+import com.marketplace.plv.cart.Cart;
+import com.marketplace.plv.cart.CartRepository;
 import com.marketplace.plv.shared.exceptions.conflict.EmailConflictException;
 import com.marketplace.plv.shared.exceptions.notfound.EmailNotFoundException;
 import com.marketplace.plv.shared.exceptions.notfound.UserNotFoundException;
@@ -37,6 +39,7 @@ public class AuthService {
 	private final AccountRepository accountRepository;
 	private final UserRepository userRepository;
 	private final BuyerRepository buyerRepository;
+	private final CartRepository cartRepository;
 
 	@Transactional
 	ResponseCookie register(UserRequest request) {
@@ -54,6 +57,9 @@ public class AuthService {
 
 		var buyer = Buyer.builder().user(user).build();
 		buyerRepository.save(buyer);
+
+		var cart  = Cart.builder().buyer(buyer).build();
+		cartRepository.save(cart);
 
 		return authCookieService.generateCookie(savedAccount.getId().toString(), savedAccount.getRole().name());
 	}
@@ -85,7 +91,7 @@ public class AuthService {
 
 	ResponseCookie logout() {
 		userRepository
-				.findById(authCookieService.getUserIdFromContext())
+				.findByAccountId(authCookieService.getUserIdFromContext())
 				.ifPresent(e -> {
 					e.setActive(false);
 					userRepository.save(e);

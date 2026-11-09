@@ -1,27 +1,40 @@
 package com.marketplace.plv.order;
 
-import com.marketplace.plv.order.dto.OrderRequest;
+import com.marketplace.plv.buyer.Buyer;
 import com.marketplace.plv.order.dto.OrderResponse;
-import com.marketplace.plv.shared.Mapper;
-import jakarta.persistence.EntityManager;
+import com.marketplace.plv.orderitem.dto.OrderItemResponse;
+import com.marketplace.plv.seller.Seller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
-public final class OrderMapper implements Mapper<Order, OrderRequest, OrderResponse> {
+public final class OrderMapper {
 
-	private final EntityManager entityManager;
-
-	@Override
-	public Order reqToEntity(OrderRequest request) {
-		var buyer = entityManager.getReference(com.marketplace.plv.buyer.Buyer.class, request.buyerId());
-		return Order.builder().buyer(buyer).totalAmount(request.totalAmount()).build();
+	public Order createOrder(Buyer buyer, Seller seller, BigDecimal totalAmount, String deliveryLocation) {
+		return Order.builder()
+				.buyer(buyer)
+				.seller(seller)
+				.totalAmount(totalAmount)
+				.deliveryLocation(deliveryLocation)
+				.build();
 	}
 
-	@Override
-	public OrderResponse entityToResponse(Order order) {
-		return new OrderResponse(order.getId(), order.getBuyer().getId(), order.getTotalAmount(),
-				order.getStatus(), order.getCreatedAt(), order.getUpdatedAt());
+	public OrderResponse entityToResponse(Order order, List<OrderItemResponse> items) {
+		return new OrderResponse(
+				order.getId(),
+				order.getBuyer().getId(),
+				order.getSeller() == null ? null : order.getSeller().getId(),
+				order.getTotalAmount(),
+				order.getStatus(),
+				order.getDeliveryLocation(),
+				order.getCurrentLocation(),
+				List.copyOf(items),
+				order.getCreatedAt(),
+				order.getUpdatedAt()
+		);
 	}
 }

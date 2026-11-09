@@ -60,9 +60,9 @@ public class StoreService {
 
 	@Transactional
 	ApiResponse<StoreResponse> registerStore(StoreRequest request) {
-		Long userId = authCookieService.getUserIdFromContext();
+		Long accountId = authCookieService.getUserIdFromContext();
 
-		var seller = sellerRepository.findByUserId(userId)
+		var seller = sellerRepository.findByAccountId(accountId)
 				.orElseThrow(() -> new UserNotFoundException("Invalid user ID"));
 
 		var newStoreRequest =new StoreRequest(seller.getId(), request.name(), request.description());
@@ -76,6 +76,14 @@ public class StoreService {
 	@Transactional
 	ApiResponse<ProductStockResponse> sellProducts(ProductRequest request) {
 		if (!authCookieService.isValidSession()) throw new ForbiddenAccessException("Invalid session");
+
+		var seller = sellerRepository.findByAccountId(authCookieService.getUserIdFromContext())
+				.orElseThrow(() -> new UserNotFoundException("Seller profile not found"));
+		var store = storeRepository.findById(request.storeId())
+				.orElseThrow(() -> new NotFoundException("Store not found"));
+		if (!store.getSeller().getId().equals(seller.getId())) {
+			throw new ForbiddenAccessException("You can only post products to your own stores");
+		}
 
 		var product = productMapper.reqToEntity(request);
 		var saved = productRepository.save(product);

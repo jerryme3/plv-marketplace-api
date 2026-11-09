@@ -16,6 +16,7 @@ import com.marketplace.plv.store.StoreRepository;
 import com.marketplace.plv.user.User;
 import com.marketplace.plv.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
@@ -45,7 +46,7 @@ public class DevelopmentDataSeeder implements ApplicationRunner {
 
 	@Override
 	@Transactional
-	public void run(ApplicationArguments args) {
+	public void run(@NonNull ApplicationArguments args) {
 		if (accountRepository.existsByEmail(SELLER_EMAIL)) {
 			return;
 		}
@@ -94,7 +95,7 @@ public class DevelopmentDataSeeder implements ApplicationRunner {
 	}
 
 	private void seedProduct(Category category, Store store, String title, String description,
-							 double price, int stockQuantity) {
+			double price, int stockQuantity) {
 		if (productRepository.existsByTitleAndStore(title, store.getId())) {
 			return;
 		}

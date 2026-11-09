@@ -28,7 +28,7 @@ public class UserService {
 	ApiResponse<UserResponse> updateUsername(UpdateRequest<String> request) {
 		var userId = authCookieService.getUserIdFromContext();
 
-		var user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Invalid user ID"));
+		var user = userRepository.findByAccountId(userId).orElseThrow(() -> new UserNotFoundException("Invalid user ID"));
 
 		if (user.getUsername().equals(request.update()))
 			throw new UsernameConflictException("Username cannot be the same as before");
@@ -47,7 +47,7 @@ public class UserService {
 	ApiResponse<UserResponse> updatePassword(PasswordUpdateRequest request) {
 		Long userId = authCookieService.getUserIdFromContext();
 
-		var user = userRepository.findById(userId)
+		var user = userRepository.findByAccountId(userId)
 				.orElseThrow(() -> new UserNotFoundException("Invalid user ID"));
 		var acc = accountRepository.findByEmail(user.getAccount().getEmail())
 				.orElseThrow(() -> new EmailNotFoundException("Invalid user email"));

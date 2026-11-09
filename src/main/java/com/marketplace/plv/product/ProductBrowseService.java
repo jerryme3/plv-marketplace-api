@@ -50,8 +50,9 @@ public class ProductBrowseService {
 				normalizedSort
 		);
 		String normalizedSearch = search == null || search.isBlank() ? null : search.trim();
+		String searchPattern = normalizedSearch == null ? null : "%" + normalizedSearch + "%";
 
-		var productPage = productRepository.browse(normalizedSearch, categoryId, storeId, pageable);
+		var productPage = productRepository.browse(searchPattern, categoryId, storeId, pageable);
 		var productIds = productPage.getContent().stream()
 				.map(Product::getId)
 				.toList();

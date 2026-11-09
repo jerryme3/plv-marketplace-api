@@ -34,7 +34,7 @@ public class Product extends AuditedEntity {
 	@JoinColumn(name = "category_id", nullable = false)
 	private Category category;
 
-	@Column(name = "title", nullable = false, length = 100)
+	@Column(name = "title", nullable = false, length = 100, columnDefinition = "VARCHAR(100)")
 	private String title;
 
 	@Column(name = "description", columnDefinition = "TEXT")

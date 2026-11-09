@@ -4,6 +4,7 @@ import com.marketplace.plv.cart.Cart;
 import com.marketplace.plv.product.Product;
 import com.marketplace.plv.shared.entity.BaseEntity;
 import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.CheckConstraint;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -16,7 +17,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Check;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -28,10 +28,10 @@ import java.time.Instant;
 @AllArgsConstructor
 @Entity
 @Table(name = "cart_items", uniqueConstraints = @UniqueConstraint(
-		name = "unique_cart_product", columnNames = {"cart_id", "product_id"}))
+		name = "unique_cart_product", columnNames = {"cart_id", "product_id"}),
+	check = @CheckConstraint(constraint = "quantity > 0"))
 @AttributeOverride(name = "id", column = @Column(name = "cart_item_id"))
 @EntityListeners(AuditingEntityListener.class)
-@Check(constraints = "quantity > 0")
 public class CartItem extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)

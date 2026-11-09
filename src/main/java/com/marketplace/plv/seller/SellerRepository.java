@@ -14,6 +14,9 @@ public interface SellerRepository extends JpaRepository<Seller, Long> {
 	boolean existsByUserId(Long userId);
 	Optional<Seller> findByUser(User user);
 
+	@Query("SELECT s FROM Seller s JOIN FETCH s.user u WHERE u.account.id = :accountId")
+	Optional<Seller> findByAccountId(@Param("accountId") Long accountId);
+
 	@Query("SELECT s FROM Seller s JOIN FETCH s.user u WHERE u.id = :id")
 	Optional<Seller> findByUserId(@Param("id") Long userId);
 

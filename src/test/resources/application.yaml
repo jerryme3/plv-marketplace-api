@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:marketplace-test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  docker:
+    compose:
+      enabled: false
+
+app:
+  jwt:
+    secret: test-only-marketplace-secret-key-0123456789
